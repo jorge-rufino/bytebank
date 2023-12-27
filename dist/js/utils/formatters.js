@@ -1,8 +1,8 @@
-"use strict";
-function formatarMoeda(valor) {
+import { FormatoData } from "../types/FormatoData.js";
+export function formatarMoeda(valor) {
     return valor.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
 }
-function formatarData(data, formato = FormatoData.PADRAO) {
+export function formatarData(data, formato = FormatoData.PADRAO) {
     // Segunda-feira, 01/12/2023
     if (formato === FormatoData.DIA_SEMANA__DIA_MES_ANO) {
         return data.toLocaleDateString('pt-br', {
