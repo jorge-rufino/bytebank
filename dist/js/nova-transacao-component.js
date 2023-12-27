@@ -24,7 +24,7 @@ elementoFormulario.addEventListener('submit', function (event) {
         alert('Tipo de Transação inválida');
         return;
     }
-    elementoSaldo.textContent = saldo.toString();
+    elementoSaldo.textContent = saldo.toLocaleString('pt-br', { currency: 'BRL', style: 'currency' });
     const novaTransacao = {
         tipoTransacao: tipoTransacao,
         valor: valor,

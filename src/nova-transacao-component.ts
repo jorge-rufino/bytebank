@@ -27,7 +27,7 @@ elementoFormulario.addEventListener('submit', function(event) { //Adciona um eve
     return;
   }
 
-  elementoSaldo.textContent = saldo.toString();
+  elementoSaldo.textContent = saldo.toLocaleString('pt-br', { currency: 'BRL', style: 'currency'});
 
   const novaTransacao: Transacao = {
     tipoTransacao: tipoTransacao,
