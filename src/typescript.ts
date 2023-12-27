@@ -13,14 +13,21 @@ lista.push(13,5.55,1001,0.589);
 
 //Tipo Personalizado (Type alias)
 type Transacao = {
-  tipoTransacao: string;
+  tipoTransacao: TipoTransacao;
   data: Date;
   valor: number;
 }
 
+//Enum (Percebe que Enum não tem o simbolo de "=")
+enum TipoTransacao {
+  DEPOSITO = "Depósito",
+  TRANSFERENCIA = "Transferência",
+  PAGAMENTO_BOLETO = "Pagamento de Boleto"
+}
+
 //Como "novaTransacao" é do tipo "Transacao", tem que seguir exatamente os nomes dos atributos e seus respectivos tipos
 const novaTransacao: Transacao = {
-  tipoTransacao: "",
+  tipoTransacao: TipoTransacao.DEPOSITO,
   data: new Date(),
   valor: 0
 }
