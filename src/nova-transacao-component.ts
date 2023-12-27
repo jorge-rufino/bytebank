@@ -1,11 +1,3 @@
-let saldo = 6000;
-
-const elementoSaldo = document.querySelector('.saldo-valor .valor') as HTMLElement;  //Pega o elemento da classe ".valor" que está dentro de ".saldo-valor"
-
-if(elementoSaldo !=  null){
-  elementoSaldo.textContent = saldo.toString();
-}
-
 const elementoFormulario = document.querySelector('.block-nova-transacao form') as HTMLFormElement;  //Pega o "form" que está dentro da classe ".block-nova-transacao"
 
 elementoFormulario.addEventListener('submit', function(event) { //Adciona um evento para toda vez que submeter o formulario, ter acesso as informações  
@@ -19,7 +11,7 @@ elementoFormulario.addEventListener('submit', function(event) { //Adciona um eve
   let tipoTransacao: string = inputTipoTransacao.value;
   let valor: number = inputValor.valueAsNumber;
   let data: Date =  new Date (inputData.value);
-
+  
   //Se os elementos não tiverem preenchidos ou se o valor for 0
   if (!elementoFormulario.checkValidity() || valor == 0){
     alert('Por favor, preencha todos os campos da transação');        

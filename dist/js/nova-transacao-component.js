@@ -1,9 +1,4 @@
 "use strict";
-let saldo = 6000;
-const elementoSaldo = document.querySelector('.saldo-valor .valor'); //Pega o elemento da classe ".valor" que está dentro de ".saldo-valor"
-if (elementoSaldo != null) {
-    elementoSaldo.textContent = saldo.toString();
-}
 const elementoFormulario = document.querySelector('.block-nova-transacao form'); //Pega o "form" que está dentro da classe ".block-nova-transacao"
 elementoFormulario.addEventListener('submit', function (event) {
     event.preventDefault(); //Toda vez que submete um formulario, ele recarrega a página, essa linha preveni isso
