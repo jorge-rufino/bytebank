@@ -6,7 +6,7 @@ elementoFormulario.addEventListener('submit', function (event) {
     const inputValor = elementoFormulario.querySelector('#valor');
     const inputData = elementoFormulario.querySelector('#data');
     //Tipando as variaveis
-    let tipoTransacao = inputTipoTransacao.value;
+    let tipoTransacao = inputTipoTransacao.value; //Converte o valor do input em "TipoTransacao"
     let valor = inputValor.valueAsNumber;
     let data = new Date(inputData.value);
     //Se os elementos não tiverem preenchidos ou se o valor for 0
@@ -14,10 +14,10 @@ elementoFormulario.addEventListener('submit', function (event) {
         alert('Por favor, preencha todos os campos da transação');
         return; //Somente para parar a função
     }
-    if (tipoTransacao == 'Depósito') {
+    if (tipoTransacao == TipoTransacao.DEPOSITO) {
         saldo += valor;
     }
-    else if (tipoTransacao == 'Transferência' || tipoTransacao == 'Pagamento de Boleto') {
+    else if (tipoTransacao == TipoTransacao.TRANSFERENCIA || tipoTransacao == TipoTransacao.PAGAMENTO_BOLETO) {
         saldo -= valor;
     }
     else {

@@ -8,7 +8,7 @@ elementoFormulario.addEventListener('submit', function(event) { //Adciona um eve
   const inputData = elementoFormulario.querySelector('#data') as HTMLInputElement;
 
   //Tipando as variaveis
-  let tipoTransacao: string = inputTipoTransacao.value;
+  let tipoTransacao: TipoTransacao = inputTipoTransacao.value as TipoTransacao; //Converte o valor do input em "TipoTransacao"
   let valor: number = inputValor.valueAsNumber;
   let data: Date =  new Date (inputData.value);
   
@@ -18,9 +18,9 @@ elementoFormulario.addEventListener('submit', function(event) { //Adciona um eve
     return;                                                     //Somente para parar a função
   }
 
-  if(tipoTransacao == 'Depósito'){
+  if(tipoTransacao == TipoTransacao.DEPOSITO){
     saldo += valor;
-  } else if (tipoTransacao == 'Transferência' || tipoTransacao == 'Pagamento de Boleto'){
+  } else if (tipoTransacao == TipoTransacao.TRANSFERENCIA || tipoTransacao == TipoTransacao.PAGAMENTO_BOLETO){
     saldo -= valor;
   } else {
     alert('Tipo de Transação inválida');
@@ -29,7 +29,7 @@ elementoFormulario.addEventListener('submit', function(event) { //Adciona um eve
 
   elementoSaldo.textContent = saldo.toString();
 
-  const novaTransacao = {
+  const novaTransacao: Transacao = {
     tipoTransacao: tipoTransacao,
     valor: valor,
     data: data
