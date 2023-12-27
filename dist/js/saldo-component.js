@@ -7,5 +7,5 @@ if (elementoSaldo != null) {
 }
 if (elementoDataAcesso != null) {
     const dataAcesso = new Date();
-    elementoDataAcesso.textContent = formatarData(dataAcesso);
+    elementoDataAcesso.textContent = formatarData(dataAcesso, FormatoData.DIA_SEMANA__DIA_MES_ANO);
 }
