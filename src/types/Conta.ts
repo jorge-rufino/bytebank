@@ -1,7 +1,19 @@
 import { TipoTransacao } from "./TipoTransacao.js";
 import { Transacao } from "./Transacao.js";
 
-let saldo: number = 3000;
+//"getItem" pode retornar "null", então usasse "||" para caso seja "null" atribuir 0 ao saldo.
+let saldo: number = JSON.parse(localStorage.getItem("saldo") || '0');
+
+//Transforma o texto em JSON para ser reconhecido pelo JavaScript e consequentemente transformado em um array de Transacoes.
+//Como Transacao tem um campo "data" que é um objeto "Date", precisamos converter.
+//"getItem" pode retornar "null", então usasse "||" para caso seja "null" criar um array vazio "[]".
+const transacoes: Transacao[] = JSON.parse(localStorage.getItem("transacoes") || '[]', (key: string, value: string) => { 
+  if (key === "data") {
+      return new Date(value);
+  }
+
+  return value;
+}) ;
 
 function debitar(valor: number){
   if(valor <= 0){
@@ -40,7 +52,9 @@ const Conta = {
       throw new Error('Tipo de Transação inválida');      
     }
 
-    console.log(novaTransacao);
+    transacoes.push(novaTransacao);
+    console.log(transacoes);
+    localStorage.setItem('transacoes', JSON.stringify(transacoes)); //Converte para JSON
   }
 }
 
