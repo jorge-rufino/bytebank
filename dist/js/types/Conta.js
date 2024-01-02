@@ -18,12 +18,14 @@ function debitar(valor) {
         throw new Error('Saldo insuficiente');
     }
     saldo -= valor;
+    localStorage.setItem('saldo', saldo.toString());
 }
 function depositar(valor) {
     if (valor <= 0) {
         throw new Error('O valor deve ser maior que 0');
     }
     saldo += valor;
+    localStorage.setItem('saldo', saldo.toString());
 }
 const Conta = {
     getSaldo() {

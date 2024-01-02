@@ -25,6 +25,7 @@ function debitar(valor: number){
   }
 
   saldo -= valor;
+  localStorage.setItem('saldo', saldo.toString());
 }
 
 function depositar(valor: number){
@@ -32,6 +33,7 @@ function depositar(valor: number){
     throw new Error('O valor deve ser maior que 0');
   }
   saldo += valor;
+  localStorage.setItem('saldo', saldo.toString());
 }
 
 const Conta = {
