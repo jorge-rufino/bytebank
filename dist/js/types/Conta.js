@@ -36,7 +36,7 @@ const Conta = {
     },
     getGrupoTransacoes() {
         const gruposTransacoes = [];
-        const listaTransacoes = structuredClone(transacoes); //Cria um clone do objeto "transacoes" em vez de somente criar uma referencia ao objeto
+        const listaTransacoes = transacoes; //Cria um clone do objeto "transacoes" em vez de somente criar uma referencia ao objeto
         const transacoesOrdenadas = listaTransacoes.sort((t1, t2) => t2.data.getTime() - t1.data.getTime());
         let dataAtualGrupoTransacao = "";
         for (let transacao of transacoesOrdenadas) {
@@ -65,7 +65,35 @@ const Conta = {
         }
         transacoes.push(novaTransacao);
         console.log(this.getGrupoTransacoes());
+        console.log(this.getResumoTransacoes());
         localStorage.setItem('transacoes', JSON.stringify(transacoes)); //Converte para JSON
+    },
+    getResumoTransacoes() {
+        const resumo = {
+            quantidadeDepositos: 0,
+            totalDepositos: 0,
+            quantidadeTransferencias: 0,
+            totalTransferencias: 0,
+            quantidadePagBoletos: 0,
+            totalPagamentosBoleto: 0
+        };
+        for (let transacao of transacoes) {
+            switch (transacao.tipoTransacao) {
+                case TipoTransacao.DEPOSITO:
+                    resumo.quantidadeDepositos++;
+                    resumo.totalDepositos += transacao.valor;
+                    break;
+                case TipoTransacao.TRANSFERENCIA:
+                    resumo.quantidadeTransferencias++;
+                    resumo.totalTransferencias += transacao.valor;
+                    break;
+                case TipoTransacao.PAGAMENTO_BOLETO:
+                    resumo.quantidadePagBoletos++;
+                    resumo.totalPagamentosBoleto += transacao.valor;
+                    break;
+            }
+        }
+        return resumo;
     }
 };
 export default Conta;

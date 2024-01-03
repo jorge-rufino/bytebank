@@ -1,6 +1,7 @@
 import SaldoComponent from "./saldo-component.js";
 import Conta from "../types/Conta.js";
 import ExtratoComponent from "./extrato-component.js";
+import ResumoComponent from "./resumo-component.js";
 const elementoFormulario = document.querySelector('.block-nova-transacao form'); //Pega o "form" que está dentro da classe ".block-nova-transacao"
 //Adciona um evento para toda vez que submeter o formulario, ter acesso as informações
 elementoFormulario.addEventListener('submit', function (event) {
@@ -27,6 +28,7 @@ elementoFormulario.addEventListener('submit', function (event) {
         Conta.registrarTransacao(novaTransacao);
         SaldoComponent.atualizar();
         ExtratoComponent.atualizar();
+        ResumoComponent.atualizar();
         elementoFormulario.reset(); //Reseta o formulario
     }
     catch (erro) {

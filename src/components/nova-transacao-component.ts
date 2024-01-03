@@ -3,6 +3,7 @@ import { Transacao } from "../types/Transacao.js";
 import SaldoComponent from "./saldo-component.js";
 import Conta from "../types/Conta.js"; 
 import ExtratoComponent from "./extrato-component.js";
+import ResumoComponent from "./resumo-component.js";
 
 const elementoFormulario = document.querySelector('.block-nova-transacao form') as HTMLFormElement;  //Pega o "form" que está dentro da classe ".block-nova-transacao"
 
@@ -36,6 +37,7 @@ elementoFormulario.addEventListener('submit', function(event) {
     Conta.registrarTransacao(novaTransacao);
     SaldoComponent.atualizar();
     ExtratoComponent.atualizar();
+    ResumoComponent.atualizar();
 
     elementoFormulario.reset();                                 //Reseta o formulario
   }
