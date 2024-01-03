@@ -3,24 +3,53 @@ import { ResumoTransacoes } from "./ResumoTransacoes.js";
 import { TipoTransacao } from "./TipoTransacao.js";
 import { Transacao } from "./Transacao.js";
 
-export class Conta {
-  nome: string;
-  saldo: number = JSON.parse(localStorage.getItem('saldo') || '0');
-  transacoes: Transacao[] = JSON.parse(localStorage.getItem('transacoes') || '[]', (key: string, value: string) => {
-    if (key === 'data') {
-      return new Date(value);
-    }
-  
-    return value;
-  });
+//"getItem" pode retornar "null", então usasse "||" para caso seja "null" atribuir 0 ao saldo.
+let saldo: number = JSON.parse(localStorage.getItem("saldo") || '0');
 
-  constructor(nome: string){
-    this.nome = nome;
+//Transforma o texto em JSON para ser reconhecido pelo JavaScript e consequentemente transformado em um array de Transacoes.
+//Como Transacao tem um campo "data" que é um objeto "Date", precisamos converter.
+//"getItem" pode retornar "null", então usasse "||" para caso seja "null" criar um array vazio "[]".
+const transacoes: Transacao[] = JSON.parse(localStorage.getItem('transacoes') || '[]', (key: string, value: string) => {
+  if (key === 'data') {
+    return new Date(value);
   }
+
+  return value;
+});
+
+function debitar(valor: number) {
+  if (valor <= 0) {
+    throw new Error('O valor deve ser maior que 0');
+  }
+
+  if (valor > saldo) {
+    throw new Error('Saldo insuficiente');
+  }
+
+  saldo -= valor;
+  localStorage.setItem('saldo', saldo.toString());
+}
+
+function depositar(valor: number) {
+  if (valor <= 0) {
+    throw new Error('O valor deve ser maior que 0');
+  }
+  saldo += valor;
+  localStorage.setItem('saldo', saldo.toString());
+}
+
+const Conta = {
+  getSaldo(): number {
+    return saldo;
+  },
+
+  getDataAcesso(): Date {
+    return new Date();
+  },
 
   getGrupoTransacoes(): GrupoTransacao[] {
     const gruposTransacoes: GrupoTransacao[] = [];
-    const listaTransacoes: Transacao[] = structuredClone(this.transacoes)   //Cria um clone do objeto "transacoes" em vez de somente criar uma referencia ao objeto
+    const listaTransacoes: Transacao[] = transacoes   //Cria um clone do objeto "transacoes" em vez de somente criar uma referencia ao objeto
     const transacoesOrdenadas: Transacao[] = listaTransacoes.sort((t1, t2) => t2.data.getTime() - t1.data.getTime());
     let dataAtualGrupoTransacao: string = "";
 
@@ -37,44 +66,23 @@ export class Conta {
     }
 
     return gruposTransacoes;
-  }
+  },
 
   registrarTransacao(novaTransacao: Transacao): void {
     if (novaTransacao.tipoTransacao == TipoTransacao.DEPOSITO) {
-      this.depositar(novaTransacao.valor);
+      depositar(novaTransacao.valor);
     } else if (novaTransacao.tipoTransacao == TipoTransacao.TRANSFERENCIA || novaTransacao.tipoTransacao == TipoTransacao.PAGAMENTO_BOLETO) {
-      this.debitar(novaTransacao.valor);
+      debitar(novaTransacao.valor);
       novaTransacao.valor *= -1;                                    //Faz o número ficar negativo para aparecer o sinal de menos 
     } else {
       throw new Error('Tipo de Transação inválida');
     }
 
-    this.transacoes.push(novaTransacao);
+    transacoes.push(novaTransacao);
     console.log(this.getGrupoTransacoes());
-    //console.log(this.getResumoTransacoes());
-    localStorage.setItem('transacoes', JSON.stringify(this.transacoes)); //Converte para JSON
-  }
-
-  debitar(valor: number) {
-    if (valor <= 0) {
-      throw new Error('O valor deve ser maior que 0');
-    }
-  
-    if (valor > this.saldo) {
-      throw new Error('Saldo insuficiente');
-    }
-  
-    this.saldo -= valor;
-    localStorage.setItem('saldo', this.saldo.toString());
-  }
-
-  depositar(valor: number) {
-    if (valor <= 0) {
-      throw new Error('O valor deve ser maior que 0');
-    }
-    this.saldo += valor;
-    localStorage.setItem('saldo', this.saldo.toString());
-  }
+    console.log(this.getResumoTransacoes());
+    localStorage.setItem('transacoes', JSON.stringify(transacoes)); //Converte para JSON
+  },
 
   getResumoTransacoes(): ResumoTransacoes {
 
@@ -87,7 +95,7 @@ export class Conta {
       totalPagamentosBoleto: 0
     };
 
-    for (let transacao of this.transacoes) {
+    for (let transacao of transacoes) {
       switch (transacao.tipoTransacao) {
         case TipoTransacao.DEPOSITO:
           resumo.quantidadeDepositos++;
@@ -108,17 +116,6 @@ export class Conta {
 
     return resumo;
   }
-
-  getSaldo(): number {
-    return this.saldo;
-  }
-
-  getDataAcesso(): Date {
-    return new Date();
-  }
-
 }
 
-const conta = new Conta('Jorge');
-
-export default conta;
+export default Conta;
