@@ -69,19 +69,23 @@ export class Conta {
             quantidadeTransferencias: 0,
             totalTransferencias: 0,
             quantidadePagBoletos: 0,
-            totalPagamentosBoleto: 0
+            totalPagamentosBoleto: 0,
+            temResumo: false
         };
         for (let transacao of this.transacoes) {
             switch (transacao.tipoTransacao) {
                 case TipoTransacao.DEPOSITO:
+                    resumo.temResumo = true;
                     resumo.quantidadeDepositos++;
                     resumo.totalDepositos += transacao.valor;
                     break;
                 case TipoTransacao.TRANSFERENCIA:
+                    resumo.temResumo = true;
                     resumo.quantidadeTransferencias++;
                     resumo.totalTransferencias += transacao.valor;
                     break;
                 case TipoTransacao.PAGAMENTO_BOLETO:
+                    resumo.temResumo = true;
                     resumo.quantidadePagBoletos++;
                     resumo.totalPagamentosBoleto += transacao.valor;
                     break;

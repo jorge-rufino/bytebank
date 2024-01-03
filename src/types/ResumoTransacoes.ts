@@ -5,4 +5,5 @@ export type ResumoTransacoes = {
   totalTransferencias: number;
   quantidadePagBoletos: number;
   totalPagamentosBoleto: number;
+  temResumo: boolean;
 }

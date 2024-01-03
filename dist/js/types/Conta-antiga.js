@@ -75,7 +75,8 @@ const Conta = {
             quantidadeTransferencias: 0,
             totalTransferencias: 0,
             quantidadePagBoletos: 0,
-            totalPagamentosBoleto: 0
+            totalPagamentosBoleto: 0,
+            temResumo: false
         };
         for (let transacao of transacoes) {
             switch (transacao.tipoTransacao) {
