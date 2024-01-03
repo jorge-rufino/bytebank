@@ -2,6 +2,7 @@ import { TipoTransacao } from "../types/TipoTransacao.js";
 import { Transacao } from "../types/Transacao.js";
 import SaldoComponent from "./saldo-component.js";
 import Conta from "../types/Conta.js"; 
+import ExtratoComponent from "./extrato-component.js";
 
 const elementoFormulario = document.querySelector('.block-nova-transacao form') as HTMLFormElement;  //Pega o "form" que está dentro da classe ".block-nova-transacao"
 
@@ -18,7 +19,7 @@ elementoFormulario.addEventListener('submit', function(event) {
     //Tipando as variaveis
     let tipoTransacao: TipoTransacao = inputTipoTransacao.value as TipoTransacao; //Converte o valor do input em "TipoTransacao"
     let valor: number = inputValor.valueAsNumber;
-    let data: Date =  new Date (inputData.value);
+    let data: Date =  new Date (inputData.value + 'T00:00:00');    //Adiciona o horario zerado para não fazer a conversão, assim não diminui 1 dia
     
     //Se os elementos não tiverem preenchidos ou se o valor for 0
     if (!elementoFormulario.checkValidity() || valor == 0){
@@ -34,6 +35,7 @@ elementoFormulario.addEventListener('submit', function(event) {
     
     Conta.registrarTransacao(novaTransacao);
     SaldoComponent.atualizar();
+    ExtratoComponent.atualizar();
 
     elementoFormulario.reset();                                 //Reseta o formulario
   }

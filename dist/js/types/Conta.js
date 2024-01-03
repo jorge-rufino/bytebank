@@ -34,7 +34,7 @@ const Conta = {
     getDataAcesso() {
         return new Date();
     },
-    getGrupoTransacao() {
+    getGrupoTransacoes() {
         const gruposTransacoes = [];
         const listaTransacoes = structuredClone(transacoes); //Cria um clone do objeto "transacoes" em vez de somente criar uma referencia ao objeto
         const transacoesOrdenadas = listaTransacoes.sort((t1, t2) => t2.data.getTime() - t1.data.getTime());
@@ -58,12 +58,13 @@ const Conta = {
         }
         else if (novaTransacao.tipoTransacao == TipoTransacao.TRANSFERENCIA || novaTransacao.tipoTransacao == TipoTransacao.PAGAMENTO_BOLETO) {
             debitar(novaTransacao.valor);
+            novaTransacao.valor *= -1; //Faz o número ficar negativo para aparecer o sinal de menos 
         }
         else {
             throw new Error('Tipo de Transação inválida');
         }
         transacoes.push(novaTransacao);
-        console.log(this.getGrupoTransacao());
+        console.log(this.getGrupoTransacoes());
         localStorage.setItem('transacoes', JSON.stringify(transacoes)); //Converte para JSON
     }
 };

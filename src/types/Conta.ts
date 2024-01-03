@@ -46,7 +46,7 @@ const Conta = {
     return new Date();
   },
 
-  getGrupoTransacao() : GrupoTransacao[] {
+  getGrupoTransacoes() : GrupoTransacao[] {
     const gruposTransacoes: GrupoTransacao[] = [];
     const listaTransacoes: Transacao[] = structuredClone(transacoes);   //Cria um clone do objeto "transacoes" em vez de somente criar uma referencia ao objeto
     const transacoesOrdenadas: Transacao[] = listaTransacoes.sort((t1, t2) => t2.data.getTime() - t1.data.getTime());
@@ -69,15 +69,16 @@ const Conta = {
 
   registrarTransacao(novaTransacao: Transacao ) : void {
     if(novaTransacao.tipoTransacao == TipoTransacao.DEPOSITO){
-      depositar(novaTransacao.valor)
+      depositar(novaTransacao.valor);
     } else if (novaTransacao.tipoTransacao == TipoTransacao.TRANSFERENCIA || novaTransacao.tipoTransacao == TipoTransacao.PAGAMENTO_BOLETO){
-      debitar(novaTransacao.valor)
+      debitar(novaTransacao.valor);
+      novaTransacao.valor *= -1;                                    //Faz o número ficar negativo para aparecer o sinal de menos 
     } else {
       throw new Error('Tipo de Transação inválida');      
     }
 
     transacoes.push(novaTransacao);
-    console.log(this.getGrupoTransacao());
+    console.log(this.getGrupoTransacoes());
     localStorage.setItem('transacoes', JSON.stringify(transacoes)); //Converte para JSON
   }
 }
