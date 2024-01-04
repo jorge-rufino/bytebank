@@ -5,6 +5,7 @@ export class Armazenador {
         localStorage.setItem(chave, valorComoString);
     }
     //Pode receber uma função opcional "reviver". Serve para fazer uma conversão do valor caso necessário.
+    //Transformamos a função usando "Generics", assim podemos definir o tipo de dado que queremos no retorno. Ou a função retorna o tipo definido ou retorna "null"
     static obter(chave, reviver) {
         const valor = localStorage.getItem(chave);
         if (valor === null) {

@@ -7,7 +7,8 @@ export class Armazenador{
   }
 
   //Pode receber uma função opcional "reviver". Serve para fazer uma conversão do valor caso necessário.
-  static obter(chave: string, reviver?: (this: any, key: string, value: any) => any){
+  //Transformamos a função usando "Generics", assim podemos definir o tipo de dado que queremos no retorno. Ou a função retorna o tipo definido ou retorna "null"
+  static obter<T>(chave: string, reviver?: (this: any, key: string, value: any) => any): T | null{
     const valor = localStorage.getItem(chave);
 
     if(valor === null){
@@ -15,9 +16,9 @@ export class Armazenador{
     }
 
     if(reviver){
-      return JSON.parse(valor, reviver);
+      return JSON.parse(valor, reviver) as T;
     }
 
-    return JSON.parse(valor);
+    return JSON.parse(valor) as T;
   }
 }
