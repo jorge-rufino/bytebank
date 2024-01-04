@@ -6,10 +6,10 @@ import { Transacao } from "./Transacao.js";
 
 export class Conta {
   protected nome: string;
-  protected saldo: number = Armazenador.obter('saldo') || 0;
+  protected saldo: number = Armazenador.obter<number>('saldo') || 0;
 
   //Aqui temos um exemplo da função opcional "reviver"
-  private transacoes: Transacao[] = Armazenador.obter('transacoes', (key: string, value: string) => {
+  private transacoes: Transacao[] = Armazenador.obter<Transacao[]>('transacoes', (key: string, value: string) => {
     if (key === 'data') {
       return new Date(value);
     }
