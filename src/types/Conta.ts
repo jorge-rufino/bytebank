@@ -66,7 +66,8 @@ export class Conta {
 
     this.transacoes.push(novaTransacao);    
     
-    Armazenador.salvar('transacoes', JSON.stringify(this.transacoes)); //Converte para JSON
+    //Antes estava usando "JSON.stringify" para enviar as transacoes, mas como ele já é utilizado no "Armazenador", estava salvando errado
+    Armazenador.salvar('transacoes', this.transacoes); //Converte para JSON
   }
 
   private debitar(valor: number) {
