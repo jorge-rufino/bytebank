@@ -1,15 +1,26 @@
+import { Armazenador } from "./Armazenador.js";
 import { TipoTransacao } from "./TipoTransacao.js";
 export class Conta {
     nome;
-    saldo = JSON.parse(localStorage.getItem('saldo') || '0');
-    transacoes = JSON.parse(localStorage.getItem('transacoes') || '[]', (key, value) => {
+    saldo = Armazenador.obter('saldo') || 0;
+    //Aqui temos um exemplo da função opcional "reviver"
+    transacoes = Armazenador.obter('transacoes', (key, value) => {
         if (key === 'data') {
             return new Date(value);
         }
         return value;
-    });
+    }) || [];
     constructor(nome) {
         this.nome = nome;
+    }
+    getSaldo() {
+        return this.saldo;
+    }
+    getDataAcesso() {
+        return new Date();
+    }
+    getTitular() {
+        return this.nome;
     }
     getGrupoTransacoes() {
         const gruposTransacoes = [];
@@ -41,9 +52,7 @@ export class Conta {
             throw new Error('Tipo de Transação inválida');
         }
         this.transacoes.push(novaTransacao);
-        console.log(this.getGrupoTransacoes());
-        //console.log(this.getResumoTransacoes());
-        localStorage.setItem('transacoes', JSON.stringify(this.transacoes)); //Converte para JSON
+        Armazenador.salvar('transacoes', JSON.stringify(this.transacoes)); //Converte para JSON
     }
     debitar(valor) {
         if (valor <= 0) {
@@ -53,14 +62,14 @@ export class Conta {
             throw new Error('Saldo insuficiente');
         }
         this.saldo -= valor;
-        localStorage.setItem('saldo', this.saldo.toString());
+        Armazenador.salvar('saldo', this.saldo.toString());
     }
     depositar(valor) {
         if (valor <= 0) {
             throw new Error('O valor deve ser maior que 0');
         }
         this.saldo += valor;
-        localStorage.setItem('saldo', this.saldo.toString());
+        Armazenador.salvar('saldo', this.saldo.toString());
     }
     getResumoTransacoes() {
         const resumo = {
@@ -92,12 +101,6 @@ export class Conta {
             }
         }
         return resumo;
-    }
-    getSaldo() {
-        return this.saldo;
-    }
-    getDataAcesso() {
-        return new Date();
     }
 }
 const conta = new Conta('Jorge');
