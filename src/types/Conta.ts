@@ -1,4 +1,5 @@
 import { Armazenador } from "./Armazenador.js";
+import { ValidaDebito } from "./Decorators.js";
 import { GrupoTransacao } from "./GrupoTransacao.js";
 import { ResumoTransacoes } from "./ResumoTransacoes.js";
 import { TipoTransacao } from "./TipoTransacao.js";
@@ -7,30 +8,44 @@ import { Transacao } from "./Transacao.js";
 export class Conta {
   protected nome: string;
   protected saldo: number = Armazenador.obter<number>('saldo') || 0;
-
+  
   //Aqui temos um exemplo da função opcional "reviver"
   private transacoes: Transacao[] = Armazenador.obter<Transacao[]>('transacoes', (key: string, value: string) => {
     if (key === 'data') {
       return new Date(value);
     }
-  
+    
     return value;
   }) || [];
-
+  
   constructor(nome: string){
     this.nome = nome;
   }
-
+  
   getSaldo(): number {
     return this.saldo;
   }
-
+  
   getDataAcesso(): Date {
     return new Date();
   }
-
+  
   getTitular(){
     return this.nome;
+  }
+  
+  @ValidaDebito
+  private debitar(valor: number) {
+    this.saldo -= valor;
+    Armazenador.salvar('saldo', this.saldo.toString());
+  }
+  
+  private depositar(valor: number) {
+    if (valor <= 0) {
+      throw new Error('O valor deve ser maior que 0');
+    }
+    this.saldo += valor;
+    Armazenador.salvar('saldo', this.saldo.toString());
   }
 
   getGrupoTransacoes(): GrupoTransacao[] {
@@ -70,26 +85,6 @@ export class Conta {
     Armazenador.salvar('transacoes', this.transacoes); //Converte para JSON
   }
 
-  private debitar(valor: number) {
-    if (valor <= 0) {
-      throw new Error('O valor deve ser maior que 0');
-    }
-  
-    if (valor > this.saldo) {
-      throw new Error('Saldo insuficiente');
-    }
-  
-    this.saldo -= valor;
-    Armazenador.salvar('saldo', this.saldo.toString());
-  }
-
-  private depositar(valor: number) {
-    if (valor <= 0) {
-      throw new Error('O valor deve ser maior que 0');
-    }
-    this.saldo += valor;
-    Armazenador.salvar('saldo', this.saldo.toString());
-  }
 
   getResumoTransacoes(): ResumoTransacoes {
 
