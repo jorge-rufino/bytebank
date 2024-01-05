@@ -1,5 +1,5 @@
 import { Armazenador } from "./Armazenador.js";
-import { ValidaDebito } from "./Decorators.js";
+import { ValidaDataTransacao, ValidaDebito, ValidaDeposito } from "./Decorators.js";
 import { GrupoTransacao } from "./GrupoTransacao.js";
 import { ResumoTransacoes } from "./ResumoTransacoes.js";
 import { TipoTransacao } from "./TipoTransacao.js";
@@ -40,10 +40,8 @@ export class Conta {
     Armazenador.salvar('saldo', this.saldo.toString());
   }
   
-  private depositar(valor: number) {
-    if (valor <= 0) {
-      throw new Error('O valor deve ser maior que 0');
-    }
+  @ValidaDeposito
+  private depositar(valor: number) {   
     this.saldo += valor;
     Armazenador.salvar('saldo', this.saldo.toString());
   }
@@ -69,6 +67,7 @@ export class Conta {
     return gruposTransacoes;
   }
 
+  @ValidaDataTransacao
   registrarTransacao(novaTransacao: Transacao): void {
     if (novaTransacao.tipoTransacao == TipoTransacao.DEPOSITO) {
       this.depositar(novaTransacao.valor);
